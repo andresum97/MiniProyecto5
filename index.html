@@ -11,6 +11,56 @@
     <title>Miniproyecto 5</title>
 </head>
 <body>
-    
+    <canvas id="board" width="600" height="300"></canvas>
+    <!-- Logica de fuzzy -->
+    <script>
+        board = document.getElementById('board');
+        ctx = board.getContext('2d',{alpha: false});
+        // Posiciones iniciales
+        let jugX = Math.floor(Math.random()*board.width);
+        let jugY = Math.floor(Math.random()*board.height);
+
+        let pelotaX = Math.floor(Math.random()*board.width);
+        let pelotaY = Math.floor(Math.random()*board.height);
+
+        let jugador = {
+            x: jugX,
+            y: jugY
+        }
+
+        let pelota = {
+            x: pelotaX,
+            y: pelotaY
+        }
+
+        let porteria = {
+            x: board.width,
+            y: board.height/2
+        }
+
+        function dibujarPorteria(){
+            ctx.beginPath();
+            ctx.lineWidth = "5";
+            ctx.strokeStyle = "red";
+            ctx.rect(porteria.x-20,porteria.y-30,20,60);
+            ctx.stroke();
+        }
+
+        function dibujarPelota(x,y){
+            ctx.beginPath();
+            ctx.arc(x,y,10,0,Math.PI*2);
+            ctx.fillStyle = "#0095DD";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        // Dibujar pelota
+        dibujarPelota(pelota.x, pelota.y);
+        // Dibujar jugador
+        dibujarPelota(jugador.x, jugador.y);
+        //Dibujar porteria
+        dibujarPorteria();
+
+    </script>
 </body>
 </html>
