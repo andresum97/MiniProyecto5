@@ -23,6 +23,8 @@
         let pelotaX = Math.floor(Math.random()*board.width);
         let pelotaY = Math.floor(Math.random()*board.height);
 
+        let tamanio = 20;
+
         let jugador = {
             x: jugX,
             y: jugY
@@ -41,23 +43,47 @@
         function dibujarPorteria(){
             ctx.beginPath();
             ctx.lineWidth = "5";
-            ctx.strokeStyle = "red";
+            ctx.strokeStyle = "gray";
             ctx.rect(porteria.x-20,porteria.y-30,20,60);
             ctx.stroke();
         }
 
         function dibujarPelota(x,y){
             ctx.beginPath();
+            ctx.fillStyle = "#E44124";
             ctx.arc(x,y,10,0,Math.PI*2);
-            ctx.fillStyle = "#0095DD";
             ctx.fill();
             ctx.closePath();
+        }
+
+        function dibujarJugador(x,y,angulo){
+            let radianes = angulo*Math.PI/180;
+            ctx.translate(x,y);
+            ctx.rotate(radianes)
+            ctx.beginPath();
+            ctx.fillStyle = "#3285E3";
+            ctx.moveTo(tamanio*Math.cos(0),tamanio*Math.sin(0));
+            for (var i = 1; i <= 3;i += 1) {
+                ctx.lineTo (tamanio * Math.cos(i * 2 * Math.PI / 3), tamanio * Math.sin(i * 2 * Math.PI / 3));
+            }
+            // ctx.lineTo (tamanio * Math.cos(2 * Math.PI / 3), tamanio * Math.sin(2 * Math.PI / 3));
+            // ctx.lineTo ((tamanio-10) * Math.cos(2 * 2 * Math.PI / 3), (tamanio+20) * Math.sin(2 * 2 * Math.PI / 3));
+            // ctx.lineTo ((tamanio+10) * Math.cos(3 * 2 * Math.PI / 3), (tamanio+20) * Math.sin(3 * 2 * Math.PI / 3));
+            ctx.closePath();
+            ctx.fill();
+            ctx.rotate(-radianes);
+            ctx.translate(-x,-y);
+            // ctx.moveTo(x,y);
+            // ctx.lineTo(x-10,y+30);
+            // ctx.lineTo(x+10,y+30);
+            // ctx.fill();
+            // ctx.closePath();
         }
 
         // Dibujar pelota
         dibujarPelota(pelota.x, pelota.y);
         // Dibujar jugador
-        dibujarPelota(jugador.x, jugador.y);
+        dibujarJugador(jugador.x, jugador.y, 80);
         //Dibujar porteria
         dibujarPorteria();
 
