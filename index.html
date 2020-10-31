@@ -11,7 +11,8 @@
     <title>Miniproyecto 5</title>
 </head>
 <body>
-    <canvas id="board" width="600" height="300"></canvas>
+    <!-- D = 2012, y = 1000/403 x - 3992.55 -->
+    <canvas id="board" width="1800" height="900"></canvas>
     <!-- Logica de fuzzy -->
     <script>
         board = document.getElementById('board');
@@ -38,6 +39,122 @@
         let porteria = {
             x: board.width,
             y: board.height/2
+        }
+
+        function entradaLejos(x){
+            let y
+            if(x<1609){
+                y = 0
+            }else{
+                y = (1000/403)*x - 3992.55 
+            }
+            
+            return y
+        }
+
+        function entradaMediano(x){
+            let y
+            if(x<603 || x>1408){
+                y = 0
+            }else{
+                y = -2.48 * Math.abs(x-1006)+1000
+            }
+            
+            return y
+        }
+        function entradaCerca(x){
+            let y
+            if(x<402){
+                y = 0
+            }else{
+                y = - 500/201 * x + 1000
+            }
+            
+            return y
+        }
+        function entradaGrande(x){
+            let y
+            if(x<=10){
+                y = (-100*x)+1000
+            }else if(x>=350){
+                y = 100*x-35000
+            }
+            else{
+                y = 0
+            }
+            
+            return y
+        }
+        function entradaBajo(x){
+            let y
+
+            if(x <10){
+                y = 0
+            }else if(x >10 && x <20){
+                y = (100*x)-1000
+            }else if(x >20 && x < 340){
+                y = 1000
+            }else if(x>340 && x < 350){
+                y = (-100*x)+35000
+            }else{
+                y = 0
+            }
+            return y
+        }
+        function respMucho(x){
+            let y
+            if(x<234){
+                y = 0
+            }else{
+                y = (9.90 * x)-2316.59
+            }
+            return y
+        }
+        function respNormal(x){
+            let y
+            if(x<100){
+                y = 0
+            }else if(x > 100 && x < 235){
+                y = - (7503/503)*(Math.abs(x-(503/3))) + 1000
+            }
+            else{
+                 y = 0 
+            }
+            return y
+        }
+        function respPoco(x){
+            let y 
+            if (x >100){
+                y = 0
+            }else{
+                y = -10*x +1000
+            }
+        }
+
+        function respGrande(x){
+            let y 
+            if(x<10){
+                y = 0
+            }else if(x>10 && x<20){
+                y = 100*x-1000
+            }else if(x>340 && x<350){
+                y = -100*x+35000
+            }else if(x>20 && x <340){
+                y = 1000
+            }else if(x >350){
+                y = 0
+            }
+        }
+        function respBajo(x){
+            let y 
+            if(x<10){
+                y = -100*x+1000
+            }else if(x>10 && x<350){
+                y = 0
+            }else if(x >350){
+                y = 100*x-35000
+            }
+
         }
 
         function dibujarPorteria(){
