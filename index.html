@@ -65,18 +65,20 @@
         function entradaCerca(x){
             let y
             if(x<402){
-                y = 0
-            }else{
                 y = - 500/201 * x + 1000
+            }else{
+                y = 0
             }
             
             return y
         }
         function entradaGrande(x){
             let y
-            if(x<=10){
+            if(x<=9 || x>351){
+                y = 100
+            }else if(x>9 && x<=10){
                 y = (-100*x)+1000
-            }else if(x>=350){
+            }else if(x>=350 && x<=351){
                 y = 100*x-35000
             }
             else{
@@ -88,13 +90,13 @@
         function entradaBajo(x){
             let y
 
-            if(x <10){
+            if(x <10 || x > 350){
                 y = 0
-            }else if(x >10 && x <20){
+            }else if(x >10 && x <=11){
                 y = (100*x)-1000
-            }else if(x >20 && x < 340){
-                y = 1000
-            }else if(x>340 && x < 350){
+            }else if(x >11 && x <=349){
+                y = 100
+            }else if(x>349 && x <= 350){
                 y = (-100*x)+35000
             }else{
                 y = 0
@@ -112,9 +114,9 @@
         }
         function respNormal(x){
             let y
-            if(x<100){
+            if(x<100 || x>=234){
                 y = 0
-            }else if(x > 100 && x < 235){
+            }else if(x > 100 && x < 234){
                 y = - (7503/503)*(Math.abs(x-(503/3))) + 1000
             }
             else{
@@ -132,28 +134,35 @@
         }
 
         function respGrande(x){
-            let y 
-            if(x<10){
+            let y
+
+            if(x <10 || x > 350){
                 y = 0
-            }else if(x>10 && x<20){
-                y = 100*x-1000
-            }else if(x>340 && x<350){
-                y = -100*x+35000
-            }else if(x>20 && x <340){
-                y = 1000
-            }else if(x >350){
+            }else if(x >10 && x <=11){
+                y = (100*x)-1000
+            }else if(x >11 && x <=349){
+                y = 100
+            }else if(x>349 && x <= 350){
+                y = (-100*x)+35000
+            }else{
                 y = 0
             }
+            return y
         }
         function respBajo(x){
-            let y 
-            if(x<10){
-                y = -100*x+1000
-            }else if(x>10 && x<350){
-                y = 0
-            }else if(x >350){
+            let y
+            if(x<=9 || x>351){
+                y = 100
+            }else if(x>9 && x<=10){
+                y = (-100*x)+1000
+            }else if(x>=350 && x<=351){
                 y = 100*x-35000
             }
+            else{
+                y = 0
+            }
+            
+            return y
 
         }
 
@@ -203,6 +212,9 @@
         dibujarJugador(jugador.x, jugador.y, 80);
         //Dibujar porteria
         dibujarPorteria();
+        let resp
+        resp = entradaCerca(1610)
+        console.log(resp)
 
     </script>
 </body>
