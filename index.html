@@ -44,10 +44,11 @@
 
         function entradaLejos(x){
             let y
-            if(x<=1408){
+            if(x<=1207.2){
                 y = 0
             }else{
-                y = (2012/1408.7)*x - 2012; 
+                y = (625/503)*x - 1500; 
+                
             }
             
             return y/1000;
@@ -55,7 +56,7 @@
 
         function entradaMediano(x){
             let y
-            if(x<603 || x>1408){
+            if(x<602.774 || x>1409.226){
                 y = 0
             }else{
                 y = -2.48 * Math.abs(x-1006)+1000
@@ -65,8 +66,9 @@
         }
         function entradaCerca(x){
             let y
-            if(x<=603){
-                y = - 1000/603 * x + 1000
+            if(x<=804.8){
+                y = -(1000/804.8)*x + 1000
+                
             }else{
                 y = 0
             }
@@ -164,7 +166,40 @@
             }
             
             return y
+        }
 
+        function respMuchoInversa(y){
+            let x
+            x = (y+2339.95)/9.97
+            return x
+        }
+        function respNormalInversa(y){
+            let x1,x2
+            x1 = -(503/7503)*(y-1000) + (503/3)
+            x2 = (503/7503)*(y-1000) + (503/3)
+            return [x1,x2]
+        }
+        function RespPocoInversa(y){
+            let x
+            x = -(y-1000)*(100.627/1000);
+            return x
+        }
+        function RespGrandeInversa(y){
+            let x1,x2
+            x1 = (y+1000)/100
+            x2 = -(y-35000)/100
+            return [x1,x2]
+        }
+        function RespBajoInversa(y){
+            let x1,x2
+            x1 = (y-1000)/(-100)
+            x2 = (y+35000)/100
+            return [x1, x2]
+        }
+        function defuzzyDist(xs,u){
+            let respuesta = 0 
+            respuesta = u*(xs.reduce((a, b) => a + b, 0))/(4*u)
+            return respuesta
         }
 
         function dibujarPorteria(){
@@ -213,9 +248,7 @@
         dibujarJugador(jugador.x, jugador.y, 80);
         //Dibujar porteria
         dibujarPorteria();
-        let resp
-        resp = entradaCerca(1610)
-        console.log(resp)
+        
 
 
         // Inicio de Fuzzy
@@ -238,14 +271,34 @@
             let entradaL = entradaLejos(distancia);
             let entradaM = entradaMediano(distancia);
             let entradaC = entradaCerca(distancia);
-            let anguloBien = bienColocado(angulo);
-            let anguloMal = malColocado(angulo);
-            console.log("Entrada Lejos "+entradaL);
-            console.log("Entrada Mediana "+entradaM);
-            console.log("Entrada Cerca "+entradaC);
-            console.log("Angulo bien colocado "+anguloBien);
-            console.log("Angulo mal colocado "+anguloMal);
+            //let anguloBien = bienColocado(angulo);
+            //let anguloMal = malColocado(angulo);
+            console.log("**************************************************")
+            console.log("Entrada Lejos "+entradaL*1000);
+            console.log("Entrada Mediana "+entradaM*1000);
+            console.log("Entrada Cerca "+entradaC*1000);
+            //console.log("Angulo bien colocado "+anguloBien);
+            //console.log("Angulo mal colocado "+anguloMal);
 
+            //let maximo = Math.max(entradaL*1000,entradaM*1000,entradaC*1000)
+
+            let respSalidaL = respMuchoInversa(entradaL*1000)
+            let respSalidaN = respNormalInversa(entradaM*1000)
+            let respSalidaP = RespPocoInversa(entradaC*1000)
+            
+            //let respSalidaG = respMuchoInversa(anguloBien)
+            //let respSalidaB = respMuchoInversa(anguloMal)
+            console.log("**************************************************")
+            console.log("Salida Largo "+respSalidaL);
+            console.log("Salida Normal1 "+respSalidaN[0]);
+            console.log("Salida Normal2 "+respSalidaN[1]);
+            console.log("Salida Poco "+respSalidaP);
+            //xs = [respSalidaL,respSalidaN[0],respSalidaN[1],+respSalidaP]
+            //resp = defuzzyDist(xs,maximo)
+            //console.log("Se debe de mover "+resp+" pixeles")
+            //console.log("Salida Grande "+respSalidaG);
+            //console.log("Salida Bajo "+respSalidaB);
+            
         // }
     </script>
 </body>
