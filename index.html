@@ -187,20 +187,28 @@
         function RespGrandeInversa(y){
             let x1,x2
             x1 = (y+1000)/100
-            x2 = -(y-35000)/100
+            x2 = (y+35000)/100
             return [x1,x2]
         }
         function RespBajoInversa(y){
             let x1,x2
-            x1 = (y-1000)/(-100)
-            x2 = (y+35000)/100
+            x1 = (y+1000)/(100)
+            x2 = (y-35000)/-100
             return [x1, x2]
         }
-        function defuzzyDist(xs,u){
-            let respuesta = 0 
-            respuesta = u*(xs.reduce((a, b) => a + b, 0))/(4*u)
+        function defuzzyDist(xs,ux){
+            let respuesta = []
+            let suma = 0
+            for(i = 0; i < xs.length; i++){
+                respuesta[i] = xs[i]*ux[i]
+            }
+            suma = ux.reduce((a,b) => a+b,0)
+            respuesta = respuesta.reduce((a, b) => a + b, 0)
+            respuesta = respuesta/suma
             return respuesta
         }
+
+
 
         function dibujarPorteria(){
             ctx.beginPath();
@@ -271,14 +279,14 @@
             let entradaL = entradaLejos(distancia);
             let entradaM = entradaMediano(distancia);
             let entradaC = entradaCerca(distancia);
-            //let anguloBien = bienColocado(angulo);
-            //let anguloMal = malColocado(angulo);
+            let anguloBien = bienColocado(angulo);
+            let anguloMal = malColocado(angulo);
             console.log("**************************************************")
             console.log("Entrada Lejos "+entradaL*1000);
             console.log("Entrada Mediana "+entradaM*1000);
             console.log("Entrada Cerca "+entradaC*1000);
-            //console.log("Angulo bien colocado "+anguloBien);
-            //console.log("Angulo mal colocado "+anguloMal);
+            console.log("Angulo bien colocado "+anguloBien);
+            console.log("Angulo mal colocado "+anguloMal);
 
             //let maximo = Math.max(entradaL*1000,entradaM*1000,entradaC*1000)
 
@@ -286,19 +294,26 @@
             let respSalidaN = respNormalInversa(entradaM*1000)
             let respSalidaP = RespPocoInversa(entradaC*1000)
             
-            //let respSalidaG = respMuchoInversa(anguloBien)
-            //let respSalidaB = respMuchoInversa(anguloMal)
+            let respSalidaG = RespGrandeInversa(anguloMal)
+            let respSalidaB = RespBajoInversa(anguloBien)
             console.log("**************************************************")
             console.log("Salida Largo "+respSalidaL);
             console.log("Salida Normal1 "+respSalidaN[0]);
             console.log("Salida Normal2 "+respSalidaN[1]);
             console.log("Salida Poco "+respSalidaP);
-            //xs = [respSalidaL,respSalidaN[0],respSalidaN[1],+respSalidaP]
-            //resp = defuzzyDist(xs,maximo)
-            //console.log("Se debe de mover "+resp+" pixeles")
-            //console.log("Salida Grande "+respSalidaG);
-            //console.log("Salida Bajo "+respSalidaB);
-            
+            xs = [respSalidaL,respSalidaN[0],respSalidaN[1],+respSalidaP]
+            ux = [entradaL*1000,entradaM*1000,entradaM*1000,entradaC*1000]
+            resp = defuzzyDist(xs,ux)
+            console.log("Se debe de mover "+resp+" pixeles")
+            console.log("Salida Grande "+respSalidaG[0]);
+            console.log("Salida Grande "+respSalidaG[1]);
+
+            console.log("Salida Bajo "+respSalidaB[0])
+            console.log("Salida Bajo "+respSalidaB[1]);
+            xsa = [respSalidaG[0],respSalidaG[1],respSalidaB[0],respSalidaB[1]]
+            uxa = [anguloMal,anguloMal,anguloBien,anguloBien]
+            resp = defuzzyDist(xsa,uxa)
+            console.log("Se debe de girar "+resp+" grados")
         // }
     </script>
 </body>
