@@ -25,6 +25,7 @@
         let pelotaY = Math.floor(Math.random()*board.height);
 
         let tamanio = 20;
+        let D = Math.sqrt(Math.pow(board.width,2) + Math.pow(board.height,2));
 
         let jugador = {
             x: jugX,
@@ -43,13 +44,13 @@
 
         function entradaLejos(x){
             let y
-            if(x<1609){
+            if(x<=1408){
                 y = 0
             }else{
-                y = (1000/403)*x - 3992.55 
+                y = (2012/1408.7)*x - 2012; 
             }
             
-            return y
+            return y/1000;
         }
 
         function entradaMediano(x){
@@ -60,19 +61,19 @@
                 y = -2.48 * Math.abs(x-1006)+1000
             }
             
-            return y
+            return y/1000;
         }
         function entradaCerca(x){
             let y
-            if(x<402){
-                y = - 500/201 * x + 1000
+            if(x<=603){
+                y = - 1000/603 * x + 1000
             }else{
                 y = 0
             }
             
-            return y
+            return y/1000;
         }
-        function entradaGrande(x){
+        function bienColocado(x){
             let y
             if(x<=9 || x>351){
                 y = 100
@@ -87,7 +88,7 @@
             
             return y
         }
-        function entradaBajo(x){
+        function malColocado(x){
             let y
 
             if(x <10 || x > 350){
@@ -108,7 +109,7 @@
             if(x<234){
                 y = 0
             }else{
-                y = (9.90 * x)-2316.59
+                y = (9.97 * x)-2339.95
             }
             return y
         }
@@ -129,7 +130,7 @@
             if (x >100){
                 y = 0
             }else{
-                y = -10*x +1000
+                y = -(1000/100.627)*x +1000
             }
         }
 
@@ -216,6 +217,36 @@
         resp = entradaCerca(1610)
         console.log(resp)
 
+
+        // Inicio de Fuzzy
+        let entro = true;
+        // console.log("Jugador"+JSON.stringify(jugador));
+        // console.log("Pelota"+JSON.stringify(pelota));
+        // console.log(Math.sqrt(Math.pow((jugador.x - pelota.x),2)+Math.pow((jugador.y - pelota.y),2)));
+        // while(entro){
+            // Primer paso medir las variables de entrega crisp
+            let distancia = Math.sqrt(Math.pow((jugador.x - pelota.x),2)+Math.pow((jugador.y - pelota.y),2));
+            console.log("Distancia: "+distancia);
+            let angulo =  (Math.atan2((jugador.y-pelota.y),(jugador.x-pelota.x)))*(180/Math.PI);
+            if(angulo < 0){
+                angulo = angulo + 360;
+            }
+            console.log("Angulo: "+angulo);
+            // Si esta lejos me muevo mucho
+            //Si esta mediano me muevo normal
+            //Si esta cerca me muevo poco
+            let entradaL = entradaLejos(distancia);
+            let entradaM = entradaMediano(distancia);
+            let entradaC = entradaCerca(distancia);
+            let anguloBien = bienColocado(angulo);
+            let anguloMal = malColocado(angulo);
+            console.log("Entrada Lejos "+entradaL);
+            console.log("Entrada Mediana "+entradaM);
+            console.log("Entrada Cerca "+entradaC);
+            console.log("Angulo bien colocado "+anguloBien);
+            console.log("Angulo mal colocado "+anguloMal);
+
+        // }
     </script>
 </body>
 </html>
