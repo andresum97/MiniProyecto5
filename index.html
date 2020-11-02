@@ -219,6 +219,19 @@
         }
 
 
+        function polaresACartesiana(lado,angulo){
+            let x;
+            let y;
+            console.log("Lado "+lado);
+            console.log("Polares "+angulo);
+            let radianes = angulo*Math.PI/180;
+            x = lado * Math.cos(radianes);
+            y = lado * Math.sin(radianes);
+            x = Math.round(x);
+            y = Math.round(y);
+            let coord = [x,y];
+            return coord;
+        }
 
         function dibujarPorteria(){
             ctx.beginPath();
@@ -260,10 +273,19 @@
             // ctx.closePath();
         }
 
+        function render(){
+                ctx.clearRect(0, 0, board.width, board.height);
+                ctx.fillStyle = "#000000";
+                ctx.fillRect(0,0,board.width, board.height);
+                dibujarPelota(pelota.x, pelota.y);
+                dibujarPorteria();
+                dibujarJugador(jugador.x, jugador.y, 0);
+        }
+
         // Dibujar pelota
         dibujarPelota(pelota.x, pelota.y);
         // Dibujar jugador
-        dibujarJugador(jugador.x, jugador.y, 80);
+        dibujarJugador(jugador.x, jugador.y, 0);
         //Dibujar porteria
         dibujarPorteria();
         
@@ -279,6 +301,7 @@
             let distancia = Math.sqrt(Math.pow((jugador.x - pelota.x),2)+Math.pow((jugador.y - pelota.y),2));
             console.log("Distancia: "+distancia);
             let angulo =  (Math.atan2((jugador.y-pelota.y),(jugador.x-pelota.x)))*(180/Math.PI);
+            console.log('Angulo antes '+angulo);
             if(angulo < 0){
                 angulo = angulo + 360;
             }
@@ -293,40 +316,40 @@
             let anguloMal = malColocado(angulo);
             let anguloNormal = normalColocado(angulo);
 
-            console.log("**************************************************")
-            console.log("Entrada Lejos "+entradaL*1000);
-            console.log("Entrada Mediana "+entradaM*1000);
-            console.log("Entrada Cerca "+entradaC*1000);
-            console.log("Angulo bien colocado "+anguloBien);
-            console.log("Angulo mal colocado "+anguloMal);
-            console.log("Angulo normal colocado "+anguloNormal);
+            // console.log("**************************************************")
+            // console.log("Entrada Lejos "+entradaL*1000);
+            // console.log("Entrada Mediana "+entradaM*1000);
+            // console.log("Entrada Cerca "+entradaC*1000);
+            // console.log("Angulo bien colocado "+anguloBien);
+            // console.log("Angulo mal colocado "+anguloMal);
+            // console.log("Angulo normal colocado "+anguloNormal);
             //let maximo = Math.max(entradaL*1000,entradaM*1000,entradaC*1000)
-            console.log("**************************************************")
+            // console.log("**************************************************")
             let respSalidaL = respMuchoInversa(entradaL*1000)
             let respSalidaN = respNormalInversa(entradaM*1000)
             let respSalidaP = RespPocoInversa(entradaC*1000)
-            console.log("**************************************************")
+            // console.log("**************************************************")
             let respSalidaAG = RespGiroMuchoInversa(anguloMal)
             let respSalidaAB = RespGiroPocoInversa(anguloBien)
             let respSalidaAN = RespGiroNormalInversa(anguloNormal)
 
-            console.log("**************************************************")
-            console.log("Salida Largo "+respSalidaL);
-            console.log("Salida Normal1 "+respSalidaN[0]);
-            console.log("Salida Normal2 "+respSalidaN[1]);
-            console.log("Salida Poco "+respSalidaP);
-            console.log("**************************************************")
-            console.log("**************************************************")
-            console.log("Salida Giro grande "+respSalidaAG);
-            console.log("Salida Giro bajo "+respSalidaAB);
-            console.log("Salida Giro Normal 1: "+respSalidaAN[1]);
-            console.log("Salida Giro Normal 2: "+respSalidaAN[0]);
-            console.log("**************************************************")
+            // console.log("**************************************************")
+            // console.log("Salida Largo "+respSalidaL);
+            // console.log("Salida Normal1 "+respSalidaN[0]);
+            // console.log("Salida Normal2 "+respSalidaN[1]);
+            // console.log("Salida Poco "+respSalidaP);
+            // console.log("**************************************************")
+            // console.log("**************************************************")
+            // console.log("Salida Giro grande "+respSalidaAG);
+            // console.log("Salida Giro bajo "+respSalidaAB);
+            // console.log("Salida Giro Normal 1: "+respSalidaAN[1]);
+            // console.log("Salida Giro Normal 2: "+respSalidaAN[0]);
+            // console.log("**************************************************")
 
-            //xs = [respSalidaL,respSalidaN[0],respSalidaN[1],+respSalidaP]
-            //ux = [entradaL*1000,entradaM*1000,entradaM*1000,entradaC*1000]
-            //resp = defuzzyDist(xs,ux)
-            //console.log("Se debe de mover "+resp+" pixeles")
+            xs = [respSalidaL,respSalidaN[0],respSalidaN[1],+respSalidaP]
+            ux = [entradaL*1000,entradaM*1000,entradaM*1000,entradaC*1000]
+            respLado = defuzzyDist(xs,ux)
+            console.log("Se debe de mover "+respLado+" pixeles")
 
             //console.log("Salida Grande "+respSalidaG[0]);
             //console.log("Salida Grande "+respSalidaG[1]);
@@ -335,10 +358,97 @@
             //console.log("Salida Bajo "+respSalidaB[1]);
             xsa = [respSalidaAG,respSalidaAB,respSalidaAN[0],respSalidaAN[1]]
             uxa = [anguloMal,anguloBien,anguloNormal,anguloNormal]
-            resp = defuzzyDist(xsa,uxa)
+            respAngulo = defuzzyDist(xsa,uxa)
 
-            console.log("Se debe de girar "+resp+" grados")
+            console.log("Se debe de girar "+respAngulo+" grados")
+            let nuevasCoord = polaresACartesiana(respLado,respAngulo);
+            console.log("Primeras coordenadas pelota "+JSON.stringify(pelota));
+            console.log("Primeras coordenadas jugador "+JSON.stringify(jugador));
+            console.log("Llego a cambiar coordenadas");
+            // console.log("Coordenadas viejas "+JSON.stringify(jugador));
+            let coordVX = jugador.x;
+            let coordVY = jugador.y;
+            // jugador.x = nuevasCoord[0];
+            // jugador.y = nuevasCoord[1];
+            console.log("Nuevas coordenadas"+nuevasCoord);
+            let coordNX = nuevasCoord[0];
+            let coordNY = nuevasCoord[1];
+            
+            let resX = jugador.x - coordNX;
+            let resY = jugador.y - coordNY;
+
+            function update(){
+                if(coordVX < resX){
+                    coordVX += 1;
+                }else
+                if(coordVX > resX){
+                    coordVX -= 1;
+                }
+
+                if(coordVY < resY){
+                    coordVY += 1;
+                }else
+                if(coordVY > resY){
+                    coordVY -= 1;
+                }
+                jugador.x = coordVX;
+                jugador.y = coordVY;
+                // console.log("Coordenadas objeivo"+coordNX+" , "+coordNY);
+                // console.log("Jugador dentro de ciclo"+JSON.stringify(jugador));
+                render();
+            }
+
+            function getMousePos(canvas, evt) {
+                var rect = canvas.getBoundingClientRect();
+                return {
+                x: evt.clientX - rect.left,
+                y: evt.clientY - rect.top
+                };
+            }
+
+            function gameLoop(){
+                update();
+                window.requestAnimationFrame(gameLoop);
+            }
+
+            board.addEventListener('mousemove',function(event){
+                let pos = getMousePos(board, event);
+                console.log("Coords: "+pos.x+" : "+pos.y);
+            })
+            // while(coordVX != coordNX || coordVY != coordNY){
+            //     if(coordVX < coordNX){
+            //         coordVX += 1;
+            //     }else
+            //     if(coordVX > coordNX){
+            //         coordVX -= 1;
+            //     }
+
+            //     if(coordVY < coordNY){
+            //         coordVY += 1;
+            //     }else
+            //     if(coordVY > coordNY){
+            //         coordVY -= 1;
+            //     }
+            //     jugador.x = coordVX;
+            //     jugador.y = coordVY;
+
+            
+            //     setInterval(redibujar(),10);
+            // }
+        //     setTimeout(()=>{
+        //         jugador.x = nuevasCoord[0];
+        //         jugador.y = nuevasCoord[1];
+        //     },2000);
+        //     console.log("Coordenadas nuevas "+JSON.stringify(jugador));
+        //     ctx.clearRect(0, 0, board.width, board.height);
+        //     ctx.fillStyle = "#000000";
+        //     ctx.fillRect(0,0,board.width, board.height);
+        //     dibujarPelota(pelota.x, pelota.y);
+        //     dibujarPorteria();
+        // // Dibujar jugador
+        //     dibujarJugador(jugador.x, jugador.y, 0);
         // }
+        window.requestAnimationFrame(gameLoop);
     </script>
 </body>
 </html>
