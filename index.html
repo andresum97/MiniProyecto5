@@ -75,32 +75,38 @@
             
             return y/1000;
         }
+
         function bienColocado(x){
             let y
-            if(x<=9 || x>351){
-                y = 100
-            }else if(x>9 && x<=10){
-                y = (-100*x)+1000
-            }else if(x>=350 && x<=351){
-                y = 100*x-35000
-            }
-            else{
-                y = 0
+            if(x<20){
+                y = -5*x+100
+            }else if(x>340){
+                y = 5*x-1700
+            }else{
+                y = 0 
             }
             
             return y
         }
+        function normalColocado(x){
+            let y
+            if(x>10 && x<=170){
+                y = -(10/8)*Math.abs(x-90)+100
+            }else if(x > 170 && x <350){
+                y = -(10/9)*Math.abs(x-260)+100
+            }else{
+                y = 0
+            }
+            return y
+        }
+
         function malColocado(x){
             let y
 
-            if(x <10 || x > 350){
+            if(x <90 || x > 270){
                 y = 0
-            }else if(x >10 && x <=11){
-                y = (100*x)-1000
-            }else if(x >11 && x <=349){
-                y = 100
-            }else if(x>349 && x <= 350){
-                y = (-100*x)+35000
+            }else if(x>90 && x<270){
+                y = (-10/9)*Math.abs(x-180)+100
             }else{
                 y = 0
             }
@@ -184,17 +190,21 @@
             x = -(y-1000)*(100.627/1000);
             return x
         }
-        function RespGrandeInversa(y){
-            let x1,x2
-            x1 = (y+1000)/100
-            x2 = (y+35000)/100
-            return [x1,x2]
+        function RespGiroMuchoInversa(y){
+            let x 
+            x = (y+1700/19)*(95/100)
+            return x
         }
-        function RespBajoInversa(y){
+        function RespGiroNormalInversa(y){
             let x1,x2
-            x1 = (y+1000)/(100)
-            x2 = (y-35000)/-100
+            x1 = 55-(7/20)*(y-100)
+            x2 = 55+(7/20)*(y-100)
             return [x1, x2]
+        }
+        function RespGiroPocoInversa(y){
+            let x 
+            x =  (y-100)*(-3/10)
+            return x
         }
         function defuzzyDist(xs,ux){
             let respuesta = []
@@ -281,38 +291,52 @@
             let entradaC = entradaCerca(distancia);
             let anguloBien = bienColocado(angulo);
             let anguloMal = malColocado(angulo);
+            let anguloNormal = normalColocado(angulo);
+
             console.log("**************************************************")
             console.log("Entrada Lejos "+entradaL*1000);
             console.log("Entrada Mediana "+entradaM*1000);
             console.log("Entrada Cerca "+entradaC*1000);
             console.log("Angulo bien colocado "+anguloBien);
             console.log("Angulo mal colocado "+anguloMal);
-
+            console.log("Angulo normal colocado "+anguloNormal);
             //let maximo = Math.max(entradaL*1000,entradaM*1000,entradaC*1000)
-
+            console.log("**************************************************")
             let respSalidaL = respMuchoInversa(entradaL*1000)
             let respSalidaN = respNormalInversa(entradaM*1000)
             let respSalidaP = RespPocoInversa(entradaC*1000)
-            
-            let respSalidaG = RespGrandeInversa(anguloMal)
-            let respSalidaB = RespBajoInversa(anguloBien)
+            console.log("**************************************************")
+            let respSalidaAG = RespGiroMuchoInversa(anguloMal)
+            let respSalidaAB = RespGiroPocoInversa(anguloBien)
+            let respSalidaAN = RespGiroNormalInversa(anguloNormal)
+
             console.log("**************************************************")
             console.log("Salida Largo "+respSalidaL);
             console.log("Salida Normal1 "+respSalidaN[0]);
             console.log("Salida Normal2 "+respSalidaN[1]);
             console.log("Salida Poco "+respSalidaP);
-            xs = [respSalidaL,respSalidaN[0],respSalidaN[1],+respSalidaP]
-            ux = [entradaL*1000,entradaM*1000,entradaM*1000,entradaC*1000]
-            resp = defuzzyDist(xs,ux)
-            console.log("Se debe de mover "+resp+" pixeles")
-            console.log("Salida Grande "+respSalidaG[0]);
-            console.log("Salida Grande "+respSalidaG[1]);
+            console.log("**************************************************")
+            console.log("**************************************************")
+            console.log("Salida Giro grande "+respSalidaAG);
+            console.log("Salida Giro bajo "+respSalidaAB);
+            console.log("Salida Giro Normal 1: "+respSalidaAN[1]);
+            console.log("Salida Giro Normal 2: "+respSalidaAN[0]);
+            console.log("**************************************************")
 
-            console.log("Salida Bajo "+respSalidaB[0])
-            console.log("Salida Bajo "+respSalidaB[1]);
-            xsa = [respSalidaG[0],respSalidaG[1],respSalidaB[0],respSalidaB[1]]
-            uxa = [anguloMal,anguloMal,anguloBien,anguloBien]
+            //xs = [respSalidaL,respSalidaN[0],respSalidaN[1],+respSalidaP]
+            //ux = [entradaL*1000,entradaM*1000,entradaM*1000,entradaC*1000]
+            //resp = defuzzyDist(xs,ux)
+            //console.log("Se debe de mover "+resp+" pixeles")
+
+            //console.log("Salida Grande "+respSalidaG[0]);
+            //console.log("Salida Grande "+respSalidaG[1]);
+
+            //console.log("Salida Bajo "+respSalidaB[0])
+            //console.log("Salida Bajo "+respSalidaB[1]);
+            xsa = [respSalidaAG,respSalidaAB,respSalidaAN[0],respSalidaAN[1]]
+            uxa = [anguloMal,anguloBien,anguloNormal,anguloNormal]
             resp = defuzzyDist(xsa,uxa)
+
             console.log("Se debe de girar "+resp+" grados")
         // }
     </script>
